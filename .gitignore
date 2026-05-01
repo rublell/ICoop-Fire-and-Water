@@ -3,18 +3,10 @@
 *.iml
 out/
 
-# Java / Gradle / Maven
+# Java build files
 *.class
-build/
 target/
-.gradle/
+build/
 
-# OS
+# macOS
 .DS_Store
-
-# Archives
-*.zip
-*.tar
-*.tar.gz
-*.dmg
-*.jar
