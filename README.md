@@ -1,40 +1,49 @@
-# ICoop — 2D Cooperative Game
+# ICoop — Fire & Water
 
-ICoop is a 2D cooperative game developed in Java using the EPFL PlayEngine framework.  
-The game features two players controlling elemental characters — Fire 🔥 and Water 💧 — who must explore different areas, interact with objects, overcome elemental obstacles, and progress toward a final boss fight.
+A local 2-player cooperative adventure game written in Java. Two elemental characters, **Fire** and **Water**, explore several maps, solve elemental puzzles, collect items and team up to defeat a final boss.
 
----
+## Gameplay
 
-## 🎮 Game Concept
+- Two players on the same keyboard, acting simultaneously with complementary elemental abilities
+- Elemental walls, obstacles and damage types that only one of the two characters can cross or survive
+- Enemies (bomb foes, hell skulls) and a final boss with ranged attacks and specific vulnerability conditions
+- Collectables and items: keys, hearts, coins, orbs, bombs, sword, staff, bow
+- Pressure plates, doors and portals linking multiple areas
 
-ICoop is designed around local cooperative gameplay, where both players act at the same time and rely on complementary elemental abilities.
+## Technical design
 
-The main gameplay mechanics include:
+- **Double dispatch / Visitor pattern** — `ICoopInteractionVisitor` resolves interactions between any two entity types without `instanceof` chains
+- **Polymorphism & modular entity hierarchy** — players, foes, projectiles, walls and collectables share common abstractions (`ElementalEntity`, `Foe`, `Projectile`, `ICoopCollectable`)
+- **Cell-based world model** — `ICoopBehavior` defines per-cell rules (walkable, flyable, elemental constraints)
+- **State management** — health, immunity frames, inventory and active element per player
+- **Maven multi-module build**
 
-- Two simultaneous players with different elemental properties
-- Element-based interactions with enemies, walls, obstacles, and damage sources
-- Collectable objects that can be used during the game, such as explosive bombs
-- A final boss encounter with ranged attacks and specific vulnerability conditions
-- Exploration of multiple playable areas and map zones
-
----
-
-## 🧠 Technical Concepts
-
-This project applies several object-oriented programming principles, including:
-
-- **Double dispatch** using `ICoopInteractionVisitor`
-- **Polymorphism** for game entities such as players, enemies, projectiles, walls, and the boss
-- **Cell-based behavior** through `ICoopBehavior`, distinguishing for example between `canWalk` and `canFly`
-- **State management** for inventory, immunity, active element, and player interactions
-- **Modular entity design** to separate actors, interactions, and game logic
-
----
-
-## 🗂️ Project Structure
+## Project structure
 
 ```text
-actor/              # Players, enemies, boss, projectiles, walls, etc.
-handler/            # Interaction visitors and handlers
-ICoopBehavior.java  # Cell behavior and movement rules
-ICoop.java          # Main game class
+icoop/src/main/java/icoop/
+├── actor/        # Players, foes, boss, projectiles, items, walls
+├── area/         # Areas and per-cell behavior
+│   └── maps/     # Individual maps
+├── handler/      # Interaction visitors and handlers
+├── ICoop.java    # Game logic and area transitions
+└── Play.java     # Entry point
+game-engine/      # Third-party educational 2D engine (PlayEngine) used as a dependency
+```
+
+## How to run
+
+Requirements: JDK 21 and Maven.
+
+```bash
+git clone https://github.com/rublell/ICoop-Fire-and-Water.git
+cd ICoop-Fire-and-Water
+mvn package
+java -jar icoop/target/ICoop-jar-with-dependencies.jar
+```
+
+Or open the project in IntelliJ IDEA and run `icoop.Play`.
+
+## Credits
+
+Rendering, windowing, input and the base area/actor framework come from the PlayEngine educational engine (`game-engine/`). The game itself lives in `icoop/`.
